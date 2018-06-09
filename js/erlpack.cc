@@ -20,12 +20,6 @@ NAN_METHOD(Pack) {
 }
 
 NAN_METHOD(Unpack) {
-    if(!info[0]->IsObject()) {
-        Nan::ThrowError("Attempting to unpack a non-object.");
-        info.GetReturnValue().Set(Nan::Null());
-        return;
-    }
-
     Nan::TypedArrayContents<uint8_t> contents(info[0]);
 
     if (contents.length() == 0) {

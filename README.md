@@ -18,6 +18,7 @@ Erlpack is a fast encoder and decoder for the Erlang Term Format (version 131) f
 - [X] Objects
 - [X] Arrays
 - [ ] Tuples
+- [X] User Types
 - [ ] PIDs
 - [ ] Ports
 - [ ] Exports
@@ -31,7 +32,8 @@ packed = erlpack.pack({'a': true, 'list': ['of', 3n, 'things', 'to', 'pack']});
 ```
 
 ## How to unpack:
-Note: Unpacking requires the binary data be a Uint8Array or Buffer. For those using electron/libchromium see the gotcha below. 
+Note: Unpacking requires the binary data be a Uint8Array or Buffer. For those using electron/libchromium see the gotcha below.
+
 ```js
 let erlpack = require("erlpack");
 
@@ -42,6 +44,29 @@ try  {
 } catch (e) {
   // got an exception parsing
 }
+```
+
+## How to make custom types packable.
+
+```js
+const { pack } = require('erlpack');
+
+class User {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  [pack.custom]() {
+    return {
+      name: this.name,
+      age: this.age,
+    };
+  }
+}
+
+const u = new User('Jake', 23);
+const packed = pack(u);
 ```
 
 ## Libchromium / Electron Gotcha
