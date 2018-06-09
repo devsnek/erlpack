@@ -145,6 +145,12 @@ public:
                 }
             }
         }
+        else if (value->IsBigInt()) {
+          v8::String::Utf8Value str(v8::Isolate::GetCurrent(), value);
+          size_t inx = 0;
+          long long ll = std::stoll(*str, &inx, 0);
+          return erlpack_append_long_long(&pk, ll);
+        }
 
         return ret;
     }

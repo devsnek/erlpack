@@ -237,29 +237,7 @@ public:
             b <<= 8;
         }
 
-        if (digits <= 4) {
-            if (sign == 0) {
-                return Nan::New<Integer>(static_cast<uint32_t>(value));
-            }
-
-            const bool isSignBitAvailable = (value & (1 << 31)) == 0;
-            if (isSignBitAvailable) {
-                int32_t negativeValue = -static_cast<int32_t>(value);
-                return Nan::New<Integer>(negativeValue);
-            }
-        }
-
-        char outBuffer[32] = {0}; // 9223372036854775807
-        const char* const formatString = sign == 0 ? "%" PRIu64 : "-%" PRIu64;
-        const int res = sprintf(outBuffer, formatString, value);
-
-        if (res < 0) {
-            THROW("Unable to convert big int to string");
-            return Nan::Null();
-        }
-        const uint8_t length = static_cast<const uint8_t>(res);
-
-        return Nan::New(outBuffer, length).ToLocalChecked();
+        return v8::BigInt::New(v8::Isolate::GetCurrent(), sign == 0 ? value : -value);
     }
 
     Local<Value> decodeSmallBig() {
