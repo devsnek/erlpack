@@ -1,8 +1,8 @@
 # Erlpack
 
-Erlpack is a fast encoder and decoder for the Erlang Term Format (version 131) for Python and Javascript.
+Erlpack is a fast encoder and decoder for the Erlang Term Format (version 131) for Python and JavaScript.
 
-# Javascript
+# JavaScript
 
 ## Things that can be packed:
 
@@ -13,7 +13,7 @@ Erlpack is a fast encoder and decoder for the Erlang Term Format (version 131) f
 - [X] Unicode Strings
 - [X] Floats
 - [X] Integers
-- [ ] Longs
+- [X] Longs
 - [ ] Longs over 64 bits
 - [X] Objects
 - [X] Arrays
@@ -25,9 +25,9 @@ Erlpack is a fast encoder and decoder for the Erlang Term Format (version 131) f
 
 ## How to pack:
 ```js
-let erlpack = require("erlpack");
+let erlpack = require('erlpack');
 
-packed = erlpack.pack({'a': true, 'list': ['of', 3, 'things', 'to', 'pack']});
+packed = erlpack.pack({'a': true, 'list': ['of', 3n, 'things', 'to', 'pack']});
 ```
 
 ## How to unpack:
@@ -38,10 +38,9 @@ let erlpack = require("erlpack");
 let unpacked = null;
 let packed = new Buffer('', 'binary');
 try  {
-    unpacked = erlpack.unpack(packed);
-}
-catch (e) {
-    // got an exception parsing
+  unpacked = erlpack.unpack(packed);
+} catch (e) {
+  // got an exception parsing
 }
 ```
 
@@ -60,12 +59,12 @@ v8::Local<v8::Value> ConvertToNodeBuffer(const v8::Local<v8::Object>& blinkArray
         auto byteArray = v8::ArrayBufferView::Cast(*blinkArray);
         return node::Buffer::Copy(v8::Isolate::GetCurrent(), (const char*)byteArray->Buffer()->GetContents().Data(), byteArray->ByteLength()).ToLocalChecked();
     }
-    
+
     return v8::Local<v8::Primitive>(v8::Null(v8::Isolate::GetCurrent()));
 }
 ```
 
-Then in Javascript something like:
+Then in JavaScript something like:
 
 ```js
 let packed = NativeUtils.convertToNodeBuffer(new Uint8Array(binaryPayload));
