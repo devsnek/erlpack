@@ -29,11 +29,12 @@ public:
             return Nan::MaybeLocal<Object>();
         }
 
-        auto buffer = Nan::NewBuffer(pk.length);
-        memcpy(node::Buffer::Data(buffer.ToLocalChecked()), pk.buf, pk.length); 
+        Isolate* isolate = Isolate::GetCurrent();
+        auto buffer = ArrayBuffer::New(isolate, pk.length);
+        memcpy(buffer->GetContents().Data(), pk.buf, pk.length);
         pk.length = 0;
         erlpack_append_version(&pk);
-        return buffer;
+        return Uint8Array::New(buffer, 0, buffer->ByteLength());
     }
 
     ~Encoder() {

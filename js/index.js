@@ -15,6 +15,9 @@ module.exports = {
     if (typeof v !== 'object') {
       throw new Error('Attempting to unpack a non-object.');
     }
+    if (v instanceof ArrayBuffer) {
+      v = new Uint8Array(v);
+    }
     return unpack(v);
   },
 };
