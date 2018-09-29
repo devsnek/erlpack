@@ -147,9 +147,7 @@ public:
             }
         }
         else if (value->IsBigInt()) {
-          v8::String::Utf8Value str(v8::Isolate::GetCurrent(), value);
-          size_t inx = 0;
-          long long ll = std::stoll(*str, &inx, 0);
+          auto ll = (long long) value.As<v8::BigInt>()->Int64Value();
           return erlpack_append_long_long(&pk, ll);
         }
 
